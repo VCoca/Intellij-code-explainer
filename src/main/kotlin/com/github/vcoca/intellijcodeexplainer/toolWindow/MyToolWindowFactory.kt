@@ -1,4 +1,4 @@
-package org.jetbrains.plugins.template.toolWindow
+package com.github.vcoca.intellijcodeexplainer.toolWindow
 
 import com.intellij.openapi.components.service
 import com.intellij.openapi.diagnostic.thisLogger
@@ -8,16 +8,13 @@ import com.intellij.openapi.wm.ToolWindowFactory
 import com.intellij.ui.components.JBLabel
 import com.intellij.ui.components.JBPanel
 import com.intellij.ui.content.ContentFactory
-import org.jetbrains.plugins.template.MyBundle
-import org.jetbrains.plugins.template.services.MyProjectService
+import com.github.vcoca.intellijcodeexplainer.MyBundle
+import com.github.vcoca.intellijcodeexplainer.services.MyProjectService
 import javax.swing.JButton
+import com.intellij.ui.components.JBTextArea
 
 
 class MyToolWindowFactory : ToolWindowFactory {
-
-    init {
-        thisLogger().warn("Don't forget to remove all non-needed sample code files with their corresponding registration entries in `plugin.xml`.")
-    }
 
     override fun createToolWindowContent(project: Project, toolWindow: ToolWindow) {
         val myToolWindow = MyToolWindow(toolWindow)
@@ -32,14 +29,17 @@ class MyToolWindowFactory : ToolWindowFactory {
         private val service = toolWindow.project.service<MyProjectService>()
 
         fun getContent() = JBPanel<JBPanel<*>>().apply {
-            val label = JBLabel(MyBundle["randomLabel", "?"])
+            val inputArea = JBTextArea()
+            val outputArea = JBTextArea()
 
-            add(label)
-            add(JButton(MyBundle["shuffle"]).apply {
-                addActionListener {
-                    label.text = MyBundle["randomLabel", service.getRandomNumber()]
-                }
-            })
+            val explainButton = JButton("Explain")
+
+            explainButton.addActionListener {
+                outputArea.text = "AI explanation goes here"
+            }
+            add(explainButton)
+            add(inputArea)
+            add(outputArea)
         }
     }
 }
